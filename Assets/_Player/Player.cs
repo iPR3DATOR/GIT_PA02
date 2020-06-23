@@ -49,9 +49,28 @@ public class Player : MonoBehaviour
             else
                 MoveDirection.y += JumpValue * Time.deltaTime;
         }
-
+        
         thisController.Move(MoveDirection);
         transform.position = new Vector3(Mathf.Clamp(transform.position.x, -1.5f, 1.5f), transform.position.y, transform.position.z);
     }
 
+    void OnTriggerEnter(Collider other)
+    {
+        if(other.tag == "Score")
+        {
+            GameManager.Score++;
+            HUD.HUDManager.UpdateScore();
+        }
+
+        if (other.tag == "Obstacle")
+        {
+            GameManager.Lives--;
+            HUD.HUDManager.UpdateLives();
+
+            if(GameManager.Lives <= 0)
+            {
+                HUD.HUDManager.GameOver();
+            }
+        }
+    }
 }
